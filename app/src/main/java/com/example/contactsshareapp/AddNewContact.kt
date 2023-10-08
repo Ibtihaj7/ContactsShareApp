@@ -25,7 +25,7 @@ class AddNewContact : AppCompatActivity() {
     private lateinit var phoneNumberLayout: TextInputLayout
 
     companion object {
-        const val MY_CONTACTS_KEY = "MyContacts"
+        const val MY_CONTACTS_KEY = "My_Contacts"
         const val ERROR_FIRST_NAME_REQUIRED = "First Name is required"
         const val ERROR_USER_EXISTS = "User with the same name already exists"
         const val ERROR_LAST_NAME_REQUIRED = "Last Name is required"
@@ -63,20 +63,20 @@ class AddNewContact : AppCompatActivity() {
             )
             AllContactsFragment.USER_INFO_LIST.add(userInformation)
             AllContactsFragment.ALL_CONTACTS_ADAPTER.notifyDataSetChanged()
-            saveContactToSharedPreferences(userInformation)
+
+            saveContactsToSharedPreferences(AllContactsFragment.USER_INFO_LIST)
             onBackPressed()
         }
     }
 
-    private fun saveContactToSharedPreferences(userInformation: UserInformation) {
+    private fun saveContactsToSharedPreferences(userInformationList: List<UserInformation>) {
         val sharedPreferences = getSharedPreferences(MY_CONTACTS_KEY, MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
         val gson = Gson()
-        val json = gson.toJson(userInformation)
+        val json = gson.toJson(userInformationList)
 
-        val timestamp = System.currentTimeMillis().toString()
-        editor.putString(timestamp, json)
+        editor.putString(MY_CONTACTS_KEY, json)
         editor.apply()
     }
 

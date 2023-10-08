@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView
 import com.example.contactsshareapp.AddNewContact
 import com.example.contactsshareapp.interfaces.FavoriteChangeListener
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class AllContactsFragment : Fragment(), FavoriteChangeListener {
     private lateinit var recyclerview:RecyclerView
@@ -54,19 +55,16 @@ class AllContactsFragment : Fragment(), FavoriteChangeListener {
     private fun loadContactsFromSharedPreferences(): List<UserInformation> {
         val sharedPreferences = requireActivity().getSharedPreferences(AddNewContact.MY_CONTACTS_KEY, MODE_PRIVATE)
         val gson = Gson()
-        val contactsList = mutableListOf<UserInformation>()
+        val json = sharedPreferences.getString(AddNewContact.MY_CONTACTS_KEY, null)
 
-        val keys = sharedPreferences.all.keys
-
-        for (key in keys) {
-            val json = sharedPreferences.getString(key, null)
-            json?.let {
-                val contact = gson.fromJson(it, UserInformation::class.java)
-                contactsList.add(contact)
-            }
+        return if (json != null) {
+            val type = object : TypeToken<List<UserInformation>>() {}.type
+            gson.fromJson(json, type)
+        } else {
+            emptyList()
         }
-        return contactsList
     }
+
     private fun filter(query: String?) {
         val filteredList = ArrayList<UserInformation>()
         val noResultsTextView = view?.findViewById<TextView>(R.id.noResultsTextView)
@@ -102,6 +100,7 @@ class AllContactsFragment : Fragment(), FavoriteChangeListener {
         if (FavoriteContactsFragment.IS_ADAPTER_INITIALIZED ) {
             FavoriteContactsFragment.FAVORITES_CONTACT_ADAPTER?.notifyDataSetChanged()
         }
+
         ALL_CONTACTS_ADAPTER?.notifyDataSetChanged()
     }
 }

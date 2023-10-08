@@ -45,7 +45,7 @@ class RecyclerviewAdapter(
 
         holder.favoriteButton.setOnClickListener {
             val currentItem = userInfoList[position]
-            currentItem.setFavoriteState(!currentItem.getFavoriteState())
+            currentItem.setFavoriteState(!currentItem.getFavoriteState(),context)
             notifyDataSetChanged()
 
             favoriteChangeListener.onFavoriteChanged(currentItem)
