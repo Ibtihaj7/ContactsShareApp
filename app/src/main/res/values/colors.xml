@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="underline">#D8D6D6</color>
     <color name="colorPopupBackground">#FFFFFF</color>
+    <color name="error_color">#FF0000</color>
+
+    <!-- Primary Colors -->
+    <color name="colorPrimary">#007ACC</color>
+    <color name="colorPrimaryDark">#005FAA</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary Colors -->
+    <color name="colorSecondary">#FFA500</color>
+    <color name="colorSecondaryVariant">#FFA500</color>
+    <color name="colorOnSecondary">#000000</color>
+
+    <!-- Tab Indicator Color -->
+    <color name="colorTabIndicator">#005FAA</color>
+
+    <!-- Search Box Color -->
+    <color name="colorSearchBoxBackground">#E0E0E0</color>
+
+    <!-- Button Color -->
+    <color name="colorButton">#FFA500</color>
+
+    <!-- Error/Validation Color -->
+    <color name="colorError">#FF0000</color>
+
+    <!-- Favorite Icon Color -->
+    <color name="colorFavoriteIcon">#FF0000</color>
+
+    <!-- Divider Lines Color -->
+    <color name="colorDivider">#E0E0E0</color>
 
 </resources>
+
+
 

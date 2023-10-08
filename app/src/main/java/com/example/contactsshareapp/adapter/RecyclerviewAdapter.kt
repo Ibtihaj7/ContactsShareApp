@@ -1,6 +1,7 @@
 package com.example.contactsshareapp.adapter
 
-import android.util.Log
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,13 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contactsshareapp.R
-import com.example.contactsshareapp.fragment.FavoriteContactsFragment
-import com.example.contactsshareapp.interfaces.OnItemClickListener
+import com.example.contactsshareapp.interfaces.FavoriteChangeListener
 import com.example.contactsshareapp.model.UserInformation
 
 class RecyclerviewAdapter(
+    private val context: Context,
     private var userInfoList: ArrayList<UserInformation>,
-    private val listener: OnItemClickListener
+    private val favoriteChangeListener: FavoriteChangeListener
 ) : RecyclerView.Adapter<RecyclerviewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -35,11 +36,19 @@ class RecyclerviewAdapter(
             if (currentItem.getFavoriteState()) R.drawable.fill_heart
             else R.drawable.empty_heart
         )
+        holder.shareButton.setOnClickListener{
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+            intent.type = "text/plain"
+            context.startActivity(intent)
+        }
 
         holder.favoriteButton.setOnClickListener {
-            Log.d("RecyclerviewAdapter", "heart_btn clicked at position $position")
+            val currentItem = userInfoList[position]
             currentItem.setFavoriteState(!currentItem.getFavoriteState())
             notifyDataSetChanged()
+
+            favoriteChangeListener.onFavoriteChanged(currentItem)
         }
     }
 
@@ -50,12 +59,6 @@ class RecyclerviewAdapter(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName: TextView = itemView.findViewById(R.id.user_name)
         val favoriteButton: ImageButton = itemView.findViewById(R.id.heart_btn)
-
-        init {
-            itemView.setOnClickListener {
-                val currentItem = userInfoList[adapterPosition]
-                listener.onItemClick(currentItem)
-            }
-        }
+        val shareButton : ImageButton = itemView.findViewById(R.id.share_btn)
     }
 }
