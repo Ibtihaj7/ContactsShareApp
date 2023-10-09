@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.contactsshareapp.R
 import com.example.contactsshareapp.interfaces.FavoriteChangeListener
 import com.example.contactsshareapp.model.UserInformation
+import com.google.gson.Gson
 
 class RecyclerviewAdapter(
     private val context: Context,
@@ -36,12 +37,19 @@ class RecyclerviewAdapter(
             if (currentItem.getFavoriteState()) R.drawable.fill_heart
             else R.drawable.empty_heart
         )
-        holder.shareButton.setOnClickListener{
-            val intent = Intent()
-            intent.action = Intent.ACTION_SEND
+        holder.shareButton.setOnClickListener {
+            val currentItem = userInfoList[position]
+
+            val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
+
+            val gson = Gson()
+            val json = gson.toJson(currentItem)
+            intent.putExtra("user_information", json)
+
             context.startActivity(intent)
         }
+
 
         holder.favoriteButton.setOnClickListener {
             val currentItem = userInfoList[position]
