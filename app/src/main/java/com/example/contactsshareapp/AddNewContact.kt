@@ -1,6 +1,5 @@
 package com.example.contactsshareapp
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +8,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.contactsshareapp.fragment.AllContactsFragment
+import com.example.contactsshareapp.interfaces.ContactAddedListener
 import com.example.contactsshareapp.model.UserInformation
 import com.google.gson.Gson
 import com.google.android.material.textfield.TextInputLayout
@@ -23,6 +23,7 @@ class AddNewContact : AppCompatActivity() {
     private lateinit var firstNameLayout: TextInputLayout
     private lateinit var lastNameLayout: TextInputLayout
     private lateinit var phoneNumberLayout: TextInputLayout
+    private var contactAddedListener: ContactAddedListener? = null
 
     companion object {
         const val MY_CONTACTS_KEY = "My_Contacts"
@@ -52,6 +53,8 @@ class AddNewContact : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         saveBtn.setOnClickListener { addNewContact() }
+
+        contactAddedListener = AllContactsFragment.contactAddedListener
     }
 
     private fun addNewContact() {
@@ -62,7 +65,7 @@ class AddNewContact : AppCompatActivity() {
                 phoneNumber.text.toString()
             )
             AllContactsFragment.USER_INFO_LIST.add(userInformation)
-            AllContactsFragment.ALL_CONTACTS_ADAPTER.notifyDataSetChanged()
+            contactAddedListener?.onContactAdded()
 
             saveContactsToSharedPreferences(AllContactsFragment.USER_INFO_LIST)
             onBackPressed()

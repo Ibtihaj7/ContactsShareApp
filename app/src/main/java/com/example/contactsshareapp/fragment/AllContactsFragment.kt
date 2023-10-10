@@ -1,5 +1,6 @@
 package com.example.contactsshareapp.fragment
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,17 +15,36 @@ import com.example.contactsshareapp.adapter.RecyclerviewAdapter
 import com.example.contactsshareapp.model.UserInformation
 import androidx.appcompat.widget.SearchView
 import com.example.contactsshareapp.AddNewContact
+import com.example.contactsshareapp.MainActivity
+import com.example.contactsshareapp.interfaces.ContactAddedListener
+import com.example.contactsshareapp.interfaces.ContactsInterface
 import com.example.contactsshareapp.interfaces.FavoriteChangeListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class AllContactsFragment : Fragment(), FavoriteChangeListener {
+class AllContactsFragment : Fragment(), FavoriteChangeListener, ContactAddedListener {
     private lateinit var recyclerview:RecyclerView
     private lateinit var searchView: SearchView
+    private lateinit var allContactsAdapter: RecyclerviewAdapter
+    private var allContactInterface: ContactsInterface? = null
 
     companion object{
         var USER_INFO_LIST = ArrayList<UserInformation>()
-        lateinit var ALL_CONTACTS_ADAPTER: RecyclerviewAdapter
+        var contactAddedListener: ContactAddedListener? = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is ContactsInterface){
+            allContactInterface = context
+        }
+        if(context is MainActivity){
+            context.allContactsInterface = object:ContactsInterface{
+                override fun onFavoriteChanged() {
+                    allContactsAdapter.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -37,8 +57,8 @@ class AllContactsFragment : Fragment(), FavoriteChangeListener {
 
         USER_INFO_LIST.addAll(loadContactsFromSharedPreferences())
 
-        ALL_CONTACTS_ADAPTER = RecyclerviewAdapter(requireContext(),USER_INFO_LIST,this)
-        recyclerview.adapter = ALL_CONTACTS_ADAPTER
+        allContactsAdapter = RecyclerviewAdapter(requireContext(),USER_INFO_LIST,this)
+        recyclerview.adapter = allContactsAdapter
 
         searchView = view.findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -49,6 +69,12 @@ class AllContactsFragment : Fragment(), FavoriteChangeListener {
                 return true
             }
         })
+
+        contactAddedListener = object : ContactAddedListener {
+            override fun onContactAdded() {
+                allContactsAdapter.notifyDataSetChanged()
+            }
+        }
         return view
     }
 
@@ -85,22 +111,22 @@ class AllContactsFragment : Fragment(), FavoriteChangeListener {
                 if (!flag) noResultsTextView?.visibility = View.VISIBLE
             }
         }
-        ALL_CONTACTS_ADAPTER.filterList(filteredList)
+        allContactsAdapter.filterList(filteredList)
     }
 
     override fun onFavoriteChanged(user: UserInformation) {
         if (user.getFavoriteState()) {
-            if (!FavoriteContactsFragment.FILTERED_DATA.contains(user)) {
-                FavoriteContactsFragment.FILTERED_DATA.add(user)
-            }
+            FavoriteContactsFragment.FILTERED_DATA.add(user)
         } else {
             FavoriteContactsFragment.FILTERED_DATA.remove(user)
         }
 
-        if (FavoriteContactsFragment.IS_ADAPTER_INITIALIZED ) {
-            FavoriteContactsFragment.FAVORITES_CONTACT_ADAPTER?.notifyDataSetChanged()
-        }
+        allContactInterface?.onFavoriteChanged()
 
-        ALL_CONTACTS_ADAPTER?.notifyDataSetChanged()
+        allContactsAdapter?.notifyDataSetChanged()
+    }
+
+    override fun onContactAdded() {
+        allContactsAdapter.notifyDataSetChanged()
     }
 }

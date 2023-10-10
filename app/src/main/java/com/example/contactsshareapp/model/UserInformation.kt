@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.contactsshareapp.AddNewContact
-import com.example.contactsshareapp.fragment.AllContactsFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class UserInformation(private var firstName:String, private var lastName:String, private var phoneNumber:String, private var isFavorite:Boolean = false) {
     fun getFirstName() : String = firstName
-    fun setFirstName(firstName:String){
+    fun setFirstName(firstName:String, context: Context){
         this.firstName = firstName
+        saveFavoriteStateToSharedPreferences(context)
     }
 
     fun getLastName() : String = lastName
@@ -20,14 +20,14 @@ class UserInformation(private var firstName:String, private var lastName:String,
     }
 
     fun getPhoneNumber() : String = phoneNumber
-    fun setPhoneNumber(phoneNumber:String){
+    fun setPhoneNumber(phoneNumber:String, context: Context){
         this.phoneNumber = phoneNumber
+        saveFavoriteStateToSharedPreferences(context)
     }
 
     fun getFavoriteState() : Boolean = isFavorite
     fun setFavoriteState(newState: Boolean, context: Context) {
         isFavorite = newState
-
         saveFavoriteStateToSharedPreferences(context)
     }
 
@@ -45,7 +45,7 @@ class UserInformation(private var firstName:String, private var lastName:String,
 
         val updatedContactList = contactList.map { contact ->
             if (contact.getFirstName() == this.firstName && contact.getLastName() == this.lastName) {
-                contact.copy(isFavorite = this.isFavorite)
+                contact.copy()
             } else {
                 contact
             }
@@ -65,5 +65,4 @@ class UserInformation(private var firstName:String, private var lastName:String,
     ): UserInformation {
         return UserInformation(firstName, lastName, phoneNumber, isFavorite)
     }
-
 }

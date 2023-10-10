@@ -6,17 +6,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.example.contactsshareapp.adapter.ViewPagerAdapter
-import com.example.contactsshareapp.fragment.FavoriteContactsFragment
+import com.example.contactsshareapp.interfaces.ContactsInterface
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ContactsInterface {
     private lateinit var myAdapter: ViewPagerAdapter
     private lateinit var tabLayout : TabLayout
     private lateinit var viewPager : ViewPager2
+    var allContactsInterface:ContactsInterface? = null
+    var favoriteContactsInterface : ContactsInterface? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,5 +52,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    override fun onFavoriteChanged() {
+        allContactsInterface?.onFavoriteChanged()
+        favoriteContactsInterface?.onFavoriteChanged()
     }
 }
