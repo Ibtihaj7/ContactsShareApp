@@ -3,11 +3,17 @@ package com.example.contactsshareapp.model
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.example.contactsshareapp.AddNewContact
+import com.example.contactsshareapp.ui.addcontact.AddNewContact
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class UserInformation(private var firstName:String, private var lastName:String, private var phoneNumber:String, private var isFavorite:Boolean = false) {
+class UserInformation(
+    private var firstName:String,
+    private var lastName:String,
+    private var phoneNumber:String,
+    private var isFavorite:Boolean = false,
+    private var photo:String = "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+) {
     fun getFirstName() : String = firstName
     fun setFirstName(firstName:String, context: Context){
         this.firstName = firstName
@@ -25,9 +31,16 @@ class UserInformation(private var firstName:String, private var lastName:String,
         saveFavoriteStateToSharedPreferences(context)
     }
 
+    fun getPhoto():String = photo
+
+    fun setPhoto(photo:String, context: Context){
+        this.photo = photo
+        saveFavoriteStateToSharedPreferences(context)
+    }
+
     fun getFavoriteState() : Boolean = isFavorite
     fun setFavoriteState(newState: Boolean, context: Context) {
-        isFavorite = newState
+        this.isFavorite = newState
         saveFavoriteStateToSharedPreferences(context)
     }
 
@@ -45,7 +58,7 @@ class UserInformation(private var firstName:String, private var lastName:String,
 
         val updatedContactList = contactList.map { contact ->
             if (contact.getFirstName() == this.firstName && contact.getLastName() == this.lastName) {
-                contact.copy()
+                contact.copy(isFavorite = this.isFavorite)
             } else {
                 contact
             }
@@ -61,8 +74,9 @@ class UserInformation(private var firstName:String, private var lastName:String,
         firstName: String = this.firstName,
         lastName: String = this.lastName,
         phoneNumber: String = this.phoneNumber,
-        isFavorite: Boolean = this.isFavorite
+        isFavorite: Boolean = this.isFavorite,
+        photo: String = this.photo
     ): UserInformation {
-        return UserInformation(firstName, lastName, phoneNumber, isFavorite)
+        return UserInformation(firstName, lastName, phoneNumber, isFavorite, photo)
     }
 }
