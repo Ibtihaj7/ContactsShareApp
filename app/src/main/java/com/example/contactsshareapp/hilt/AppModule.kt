@@ -1,9 +1,9 @@
 package com.example.contactsshareapp.hilt
 
-import DataRepo
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.example.contactsshareapp.repo.DataRepo
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -27,5 +27,14 @@ object AppModule {
     @Provides
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataRepo(
+        sharedPreferences: SharedPreferences,
+        gson: Gson
+    ): DataRepo {
+        return DataRepo(sharedPreferences, gson)
     }
 }

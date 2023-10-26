@@ -1,11 +1,9 @@
 package com.example.contactsshareapp.ui.addcontact
 
-import DataRepo
+import com.example.contactsshareapp.repo.DataRepo
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.example.contactsshareapp.model.UserInformation
-import com.example.contactsshareapp.ui.addcontact.AddNewContact
-import com.example.contactsshareapp.ui.allcontact.AllContactsFragment
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,23 +11,14 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNewContactViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-    private val gson: Gson
+    private val gson: Gson,
+    private val dataRepo: DataRepo
 ) : ViewModel() {
 
-
-    private var userList: ArrayList<UserInformation> = DataRepo.getAllUserList()
-
-    fun addNewContact(
-        firstName: String,
-        lastName: String,
-        phoneNumber: String
-    ) {
-        val userInformation = UserInformation(
-            firstName,
-            lastName,
-            phoneNumber
-        )
-        userList.add(userInformation)
+    private var userList: List<UserInformation> = dataRepo.getAllUsers()
+    fun addNewContact(firstName: String, lastName: String, phoneNumber: String) {
+        val userInformation = UserInformation(firstName, lastName, phoneNumber)
+        dataRepo.addUser(userInformation)
         saveContactsToSharedPreferences(userList)
     }
 
@@ -42,13 +31,10 @@ class AddNewContactViewModel @Inject constructor(
     }
 
     fun validateInput(firstName: String, lastName: String, phoneNumber: String): Any {
-        if(firstName.isNullOrEmpty() || lastName.isNullOrEmpty() || phoneNumber.isNullOrEmpty())
-            return false
-
-        if (userExists(firstName,lastName)) {
-           return false
-        }
-        return true
+        return !(firstName.isNullOrEmpty() ||
+                lastName.isNullOrEmpty() ||
+                phoneNumber.isNullOrEmpty() ||
+                userExists(firstName,lastName))
     }
 
     fun userExists(firstName: String, lastName: String): Boolean {

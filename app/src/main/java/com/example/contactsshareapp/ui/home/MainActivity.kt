@@ -9,19 +9,17 @@ import android.view.MenuItem
 import com.example.contactsshareapp.R
 import com.example.contactsshareapp.ui.adapter.ViewPagerAdapter
 import com.example.contactsshareapp.databinding.ActivityMainBinding
-import com.example.contactsshareapp.callbacks.ContactsInterface
 import com.example.contactsshareapp.ui.addcontact.AddNewContact
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), ContactsInterface {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
-
     private lateinit var myAdapter: ViewPagerAdapter
-    var allContactsInterface:ContactsInterface? = null
-    var favoriteContactsInterface : ContactsInterface? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -53,10 +51,5 @@ class MainActivity : AppCompatActivity(), ContactsInterface {
             }
         }
         return true
-    }
-
-    override fun onFavoriteChanged() {
-        allContactsInterface?.onFavoriteChanged()
-        favoriteContactsInterface?.onFavoriteChanged()
     }
 }

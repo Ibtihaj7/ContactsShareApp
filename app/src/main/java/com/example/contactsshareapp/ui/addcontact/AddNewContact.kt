@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.contactsshareapp.callbacks.ContactAddedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.contactsshareapp.databinding.ActivityAddNewContactBinding
+import com.example.contactsshareapp.ui.SharedViewModel
 import com.example.contactsshareapp.ui.allcontact.AllContactsFragment
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,9 +15,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddNewContact : AppCompatActivity() {
-    private var contactAddedListener: ContactAddedListener? = AllContactsFragment.contactAddedListener
-    private lateinit var binding:ActivityAddNewContactBinding
+    private var contactAddedListener: AllContactsFragment.ContactAddedListener? = AllContactsFragment.contactAddedListener
+    private lateinit var binding: ActivityAddNewContactBinding
     private val viewModel: AddNewContactViewModel by viewModels()
+    private lateinit var sharedViewModel: SharedViewModel
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -25,7 +27,7 @@ class AddNewContact : AppCompatActivity() {
     lateinit var gson: Gson
 
     companion object {
-        const val MY_CONTACTS_KEY = "MyContact"
+        const val MY_CONTACTS_KEY = "MyContacts"
         const val ERROR_FIRST_NAME_REQUIRED = "First Name is required"
         const val ERROR_USER_EXISTS = "User with the same name already exists"
         const val ERROR_LAST_NAME_REQUIRED = "Last Name is required"
@@ -38,11 +40,18 @@ class AddNewContact : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        binding.saveButton.setOnClickListener { addNewContact() }
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+        setupSaveButton()
+    }
+
+    private fun setupSaveButton() {
+        binding.saveButton.setOnClickListener {
+            addNewContact()
+        }
     }
 
     private fun addNewContact() {
@@ -55,10 +64,15 @@ class AddNewContact : AppCompatActivity() {
         if (isValid == true) {
             viewModel.addNewContact(firstName, lastName, phoneNumber)
             contactAddedListener?.onContactAdded()
+//            setResult()
             onBackPressed()
         } else {
             handleValidationErrors(firstName, lastName, phoneNumber)
         }
+    }
+
+    private fun notifyContactAdded() {
+        sharedViewModel.notifyContactAdded()
     }
 
     private fun handleValidationErrors(firstName: String, lastName: String, phoneNumber: String) {
