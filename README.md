@@ -13,16 +13,16 @@ Main Features
 Additional Features
 1. Contact Sharing: Users can share contact information with others through the app, making it convenient to exchange contact details.
 2. Persistence: The app uses SharedPreferences to save contact information, ensuring that contacts are stored even after the app is closed.
-   
-## Getting Started
-To get started with the Contacts Sharing App, follow these steps:
-1. Clone the Repository: Clone this GitHub repository to your local machine using the following command:
-    ```shell
-   git clone https://github.com/your-username/contact-sharing-app.git
-2. Open in Android Studio: Open the project in Android Studio or your preferred Android development environment.
-3. Run the App: Connect your Android device or use an emulator, then run the app on the device.
-4. Explore the App: Once the app is running, you can explore its features, add new contacts, mark contacts as favorites, and search for contacts.
-    
+
+
+## Screenshots
+<img width="207" alt="Screen Shot 2024-05-24 at 5 20 30 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/fe078f64-0eca-4cc1-ab7f-ccf7dc2a37d9">
+<img width="205" alt="Screen Shot 2024-05-24 at 5 20 49 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/ea051e11-dd1a-40c0-9e9d-384165e5a487">
+<img width="206" alt="Screen Shot 2024-05-24 at 5 21 00 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/7f89a568-6828-41a1-8119-ebaab5088605">
+<img width="207" alt="Screen Shot 2024-05-24 at 5 21 49 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/4b8c665e-77a0-4d67-8727-bb89fbfd323d">
+<img width="211" alt="Screen Shot 2024-05-24 at 5 22 03 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/dbcc2f9b-8688-4b51-a49b-40f2b279e7e5">
+<img width="207" alt="Screen Shot 2024-05-24 at 5 22 26 PM" src="https://github.com/Ibtihaj7/ContactsShareApp/assets/92644947/2bdea87b-1f54-4835-85fc-7c80d012ffa2">  
+
 ## Usage
 1. View Contacts:
    - Launch the app, and you will see two tabs: "All Contacts" and "Favorite Contacts."
@@ -56,3 +56,8 @@ To get started with the Contacts Sharing App, follow these steps:
 - There should be a button to save the contact information.
 - When saving a new contact, it should appear in the first activity.
 - Save the contact information in device storage using shared preferences.
+
+## Getting Started
+1. Clone the repository to your local machine.
+2. Open the project in Android Studio to access the codebase.
+3. Build and run the application on an emulator or physical device to start organizing your tasks.  
